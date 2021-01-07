@@ -1,7 +1,7 @@
 # Differentiable Morphing
 
 ### Image morphing without reference points by applying warp maps and optimizing over them.  
-Differentiable Morphing is machine learning algorithm that can morph any two images without reference points. It called "differentiable morphing" because neural network here is not used in traditional data to label mapping sence, but as an easy way to solve optimisation problem where one image is mapped to another via warp maps that are found by gradient descent. So after maps are found there is no need for the network itself.
+Differentiable Morphing is a machine learning algorithm that can morph any two images without reference points. It called "differentiable morphing" because the neural network here is not used in traditional data to label a mapping scene, but as an easy way to solve optimisation problem where one image is mapped to another via warp maps that are found by gradient descent. So after maps are found there is no need for the network itself.
 
 ## Results
 ![example 1](images/example_1.gif)
@@ -20,7 +20,7 @@ morph.py -s images/img_1.jpg -t images/img_2.jpg [-e 1000 -a 0.8 -m 0.8 -w 0.3]
 -s Source file  
 -t Target file  
   
-Unnecessery parameters:  
+Unnecessary parameters:  
 -e Number of epochs to train maps on traning stage  
 -a Addition map multiplyer  
 -m Multiplication map multiplyer  
@@ -36,13 +36,13 @@ After several trials I found out that the best way to achieve such effect is to 
   
 ![formula](images/formula.jpg)  
   
-Here "Mult map" removes unnesecessery parts of an image and shifts color balance, "Add map" creates new colors that are not present in original image and "Warp map" distort an image in some way to reproduce shifting, rotation and scaling of objects. W operation is [dense_image_warp](https://www.tensorflow.org/addons/api_docs/python/tfa/image/dense_image_warp) method that present in tensorflow and usually used for optical flow estimation tasks. 
+Here "Mult map" removes unnesecessery parts of an image and shifts color balance, "Add map" creates new colors that are not present in original image and "Warp map" distort an image in some way to reproduce shifting, rotation and scaling of objects. W operation is [dense_image_warp](https://www.tensorflow.org/addons/api_docs/python/tfa/image/dense_image_warp) method that is present in tensorflow and usually used for optical flow estimation tasks. 
   
-All maps are found by gradient descent using very simple convolution network. Now, by applying alpha scaling parameter to every map we will get smooth transition from one image to another without any loss of useful data (at least for the given toy example).  
+All maps are found by gradient descent using a very simple convolution network. Now, by applying alpha scaling parameter to every map we will get a smooth transition from one image to another without any loss of useful data (at least for the given toy example).  
   
 ![transition](images/transition.jpg) 
   
   
 ## Thoughts
 
-Notice that all maps produced generate somewhat meaningful interpolation without any understanding of what exactly present in the images. That means that warp operation might be very useful in images processing tasks. In some sense warp operation might be thought as long range convolution, because it can "grab" data from any point of an image and reshape it in some useful way. Therefore it might be beneficial to use warp operation in classification tasks and might allow networks be less susceptible to small perturbations of the data. But especially, it should be benefitial to use in generation task. It should be much easier to produce new data by combining and perturbating several examples of known data points than to learn a function that represents all data points at ones.
+Notice that all maps produced generate somewhat meaningful interpolation without any understanding of what exactly is present in the images. That means that warp operation might be very useful in image processing tasks. In some sense warp operation might be thought as long range convolution, because it can "grab" data from any point of an image and reshape it in some useful way. Therefore it might be beneficial to use warp operation in classification tasks and might allow networks to be less susceptible to small perturbations of the data. But especially, it should be beneficial to use in a generation task. It should be much easier to produce new data by combining and perturbating several examples of known data points than to learn a function that represents all data points at once.
